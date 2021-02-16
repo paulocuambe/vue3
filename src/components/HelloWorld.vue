@@ -1,19 +1,35 @@
 <template>
   <h1>{{ msg }}</h1>
-  <button @click="count++">count is: {{ count }}</button>
-  <p>Edit <code>components/HelloWorld.vue</code> to test hot module replacement.</p>
+  <h2>Count is {{ count }}</h2>
+  <p>Increment by <input type="number" name="number" /></p>
+  <button @click="increment">Increment</button>
+  <button @click="decrement">Decrement</button>
+  <p>So this is vue 3 humm??</p>
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   props: {
-    msg: String
+    msg: String,
   },
-  data() {
+  setup() {
+    let count = ref(0);
+    const increment = () => {
+      count.value += 1;
+    };
+
+    const decrement = () => {
+      count.value -= 1;
+    };
+
     return {
-      count: 0
-    }
-  }
-}
+      count,
+      increment,
+      decrement,
+    };
+  },
+};
 </script>
