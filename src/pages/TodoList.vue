@@ -1,10 +1,10 @@
 <template>
   <h1>Minha TodoList</h1>
   <form @submit.prevent="addTodo()">
-    <input type="text" name="text" v-model="text" id="text" />
+    <input id="text" v-model="text" type="text" name="text" />
     <button type="submit">Add</button>
   </form>
-  <p style="color: red" v-if="errorMessage">{{ errorMessage }}</p>
+  <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
   <ul v-if="todoList.length > 0">
     <li v-for="todo in todoList" :key="todo.id">
       <span :class="{ line: todo.completed }">

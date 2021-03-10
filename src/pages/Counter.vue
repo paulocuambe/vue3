@@ -1,9 +1,9 @@
 <template>
   <h1>My counter</h1>
   <h2>Current value: {{ count }}</h2>
-  <p>Step: <input type="number" v-model="step" /></p>
+  <p>Step: <input v-model="step" type="number" /></p>
   <button @click="increment">Increment</button>
-  <button @click="reset" v-show="count > 0">Reset counter</button>
+  <button v-show="count > 0" @click="reset">Reset counter</button>
 </template>
 
 <script>
