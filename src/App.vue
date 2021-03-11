@@ -4,7 +4,7 @@
     <br />
     <router-link :to="{ name: 'Counter' }">Counter</router-link>
     <br />
-    <router-link :to="{ name: 'TodoList' }">TodoList</router-link>
+    <router-link :to="{ name: 'TodoApp' }">TodoList</router-link>
   </nav>
   <router-view></router-view>
 </template>
