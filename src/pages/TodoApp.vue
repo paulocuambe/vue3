@@ -1,9 +1,11 @@
 <template>
   <h1>Minha TodoList</h1>
-  <form style="margin-bottom: 8px" @submit.prevent="addTodo()">
-    <input id="text" v-model="text" type="text" name="text" />
+
+  <form @submit.prevent="addTodo()">
+    <input v-model="text" type="text" style="margin: 0 8px 8px 0" />
     <button type="submit">Add</button>
   </form>
+
   <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
 
   <todo-list-item v-if="todoList.length > 0" :todos="todoList" @toggle-todo="toggleTodo" @delete-todo="deleteTodo" />
@@ -12,46 +14,54 @@
 
 <script>
 import TodoListItem from "/@/components/todo/TodoListItem.vue";
-import { ref } from "vue";
+import { reactive, toRefs } from "vue";
 
 export default {
   components: { TodoListItem },
   setup() {
-    const todoList = ref([
-      { id: new Date().getTime(), text: "Learn Vue", completed: true },
-      { id: new Date().getTime() + 1, text: "Learn React", completed: false },
-      { id: new Date().getTime() + 2, text: "Learn Svelt", completed: false },
-    ]);
-    const text = ref("");
-    const errorMessage = ref("");
+    const state = reactive({
+      errorMessage: "",
+      text: "",
+      todoList: [
+        { id: new Date().getTime(), text: "Learn Vue", completed: true },
+        { id: new Date().getTime() + 1, text: "Learn React", completed: false },
+        { id: new Date().getTime() + 2, text: "Learn Svelt", completed: false },
+      ],
+    });
+
+    const textIsValid = () => {
+      if (state.text) {
+        if (state.todoList.some((todo) => todo.text.toLowerCase() === state.text.toLowerCase())) {
+          state.errorMessage = "That item is already on the list.";
+          return false;
+        }
+        return true;
+      } else {
+        state.errorMessage = "The field must be filled.";
+        return false;
+      }
+    };
 
     const addTodo = () => {
-      if (text.value) {
-        if (todoList.value.some((val) => val.text.toLowerCase() == text.value.toLowerCase())) {
-          errorMessage.value = "That item is already on the list";
-          return;
-        }
-
+      if (textIsValid()) {
         const newTodo = {
           id: new Date().getTime(),
-          text: text.value,
+          text: state.text,
           completed: false,
         };
 
-        todoList.value.push(newTodo);
-        text.value = "";
-        errorMessage.value = "";
-      } else {
-        errorMessage.value = "The field must be filled.";
+        state.todoList.push(newTodo);
+        state.text = "";
+        state.errorMessage = "";
       }
     };
 
     const deleteTodo = (id) => {
-      todoList.value = todoList.value.filter((item) => item.id !== id);
+      state.todoList = state.todoList.filter((item) => item.id !== id);
     };
 
     const toggleTodo = (id) => {
-      todoList.value = todoList.value.map((item) => {
+      state.todoList = state.todoList.map((item) => {
         if (item.id === id) {
           item.completed = item.completed ? false : true;
         }
@@ -60,9 +70,7 @@ export default {
     };
 
     return {
-      text,
-      todoList,
-      errorMessage,
+      ...toRefs(state),
       addTodo,
       deleteTodo,
       toggleTodo,
