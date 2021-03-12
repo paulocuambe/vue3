@@ -1,8 +1,8 @@
 <template>
   <div style="display: flex; margin-bottom: 8px">
-    <input v-model="todoItem.completed" type="checkbox" @click="toggle()" />
+    <input v-model="todoItem.completed" type="checkbox" @click="toggle" />
     <span :class="{ line: todo.completed }">{{ todoItem.text }} </span>
-    <button style="margin-left: 8px" @click="deleteTodo(todoItem.id)">Delete</button>
+    <button style="margin-left: 8px" @click="deleteTodo">Delete</button>
   </div>
 </template>
 
@@ -23,12 +23,12 @@ export default {
   setup(props, context) {
     const { todo: todoItem } = toRefs(props);
 
-    const deleteTodo = (id) => {
-      context.emit("delete-todo", id);
+    const deleteTodo = () => {
+      context.emit("delete-todo");
     };
 
-    const toggle = (id) => {
-      context.emit("toggle", id);
+    const toggle = () => {
+      context.emit("toggle");
     };
 
     return {
